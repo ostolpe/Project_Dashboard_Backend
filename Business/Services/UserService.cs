@@ -1,0 +1,151 @@
+﻿using Business.Dtos;
+using Business.Factories;
+using Data.Entities;
+using Data.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
+
+namespace Business.Services
+{
+    public interface IUserService
+    {
+        Task<bool> CreateUserAsync(AddUserForm userForm);
+        Task<bool> DeleteUserAsync(string userId);
+        Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByIdAsync(string userId);
+        Task<IEnumerable<User>?> GetUsersAsync();
+        Task<bool> UpdateUserAsync(UpdateUserForm userForm);
+    }
+
+    public class UserService(IUserRepository userRepository, IMemoryCache cache, UserManager<UserEntity> userManager) : IUserService
+    {
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IMemoryCache _cache = cache;
+        private readonly UserManager<UserEntity> _userManager = userManager;
+        private const string _cacheKey_All = "User_All";
+
+        public async Task<bool> CreateUserAsync(AddUserForm userForm)
+        {
+            if (userForm == null)
+                return false;
+
+            var exists = await _userRepository.ExistsAsync(x => x.Email == userForm.Email);
+            if (exists)
+                return false;
+
+            var entity = UserFactory.CreateUserEntity(userForm);
+
+            //var password = "BytMig123!"; // Detta måste gå att lösa på ett bättre säkrare sätt? Hämta från config? 
+
+            //behövs password ens skickas med här? eller räcker det med att det skickas in när man signar upp...?
+            var result = await _userManager.CreateAsync(entity);
+
+            if (result.Succeeded)
+            {
+                _cache.Remove(_cacheKey_All);
+            }
+
+            return result.Succeeded;
+        }
+
+        public async Task<User?> GetUserByIdAsync(string userId)
+        {
+            var user = new User();
+
+            if (_cache.TryGetValue(_cacheKey_All, out IEnumerable<User>? cachedItems))
+            {
+                user = cachedItems?.FirstOrDefault(x => x.Id == userId);
+                if (user != null)
+                    return user;
+            }
+
+            var entity = await _userRepository.GetAsync(x => x.Id == userId);
+            if (entity == null)
+                return null;
+
+            await SetCache();
+
+            user = UserFactory.CreateUser(entity);
+
+            return user;
+        }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            var user = new User();
+
+            if (_cache.TryGetValue(_cacheKey_All, out IEnumerable<User>? cachedItems))
+            {
+                user = cachedItems?.FirstOrDefault(x => x.Id == email);
+                if (user != null)
+                    return user;
+            }
+
+            var entity = await _userRepository.GetAsync(x => x.Id == email);
+            if (entity == null)
+                return null;
+
+            await SetCache();
+
+            user = UserFactory.CreateUser(entity);
+            return user;
+        }
+
+        public async Task<IEnumerable<User>?> GetUsersAsync()
+        {
+            if (_cache.TryGetValue(_cacheKey_All, out IEnumerable<User>? cachedItems))
+                return cachedItems;
+
+            var users = await SetCache();
+            return users;
+        }
+
+        public async Task<bool> UpdateUserAsync(UpdateUserForm userForm)
+        {
+            if (userForm == null)
+                return false;
+
+            var user = await _userRepository.GetAsync(x => x.Id == userForm.Id);
+            if (user == null)
+                return false;
+
+            UserFactory.UpdateUser(user, userForm);
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                _cache.Remove(_cacheKey_All);
+            }
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> DeleteUserAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return false;
+
+            var user = await _userRepository.GetAsync(x => x.Id == userId);
+            if (user == null)
+                return false;
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                _cache.Remove(_cacheKey_All);
+
+            return result.Succeeded;
+        }
+
+        public async Task<IEnumerable<User>> SetCache()
+        {
+            _cache.Remove(_cacheKey_All);
+            var entities = await _userRepository.GetAllAsync();
+            var users = entities.Select(UserFactory.CreateUser);
+
+            users = users.OrderBy(x => x.FirstName);
+            _cache.Set(_cacheKey_All, users, TimeSpan.FromMinutes(10));
+
+            return users;
+        }
+    }
+}
