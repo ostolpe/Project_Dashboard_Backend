@@ -76,6 +76,8 @@ namespace Business.Services
             if (project == null)
                 return false;
 
+            ProjectFactory.UpdateProject(project, projectForm);
+
             var result = await _projectRepository.UpdateAsync(project);
             if (result)
                 _cache.Remove(_cacheKey_All);

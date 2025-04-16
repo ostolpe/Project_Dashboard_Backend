@@ -7,6 +7,7 @@ namespace Business.Factories
     {
         public static ProjectEntity CreateProjectEntity(AddProjectForm projectForm)
         {
+
             return new ProjectEntity
             {
                 ImageUrl = projectForm.ImageUrl,
@@ -51,6 +52,36 @@ namespace Business.Factories
                     Name = projectEntity.Status.Name
                 }
             };
+        }
+
+        public static void UpdateProject(ProjectEntity entity, UpdateProjectForm form)
+        {
+            if (entity.ImageUrl != form.ImageUrl)
+                entity.ImageUrl = form.ImageUrl;
+
+            if (entity.Name != form.Name)
+                entity.Name = form.Name;
+
+            if (entity.Description != form.Description)
+                entity.Description = form.Description;
+
+            if (entity.Budget != form.Budget)
+                entity.Budget = form.Budget;
+
+            if (entity.StartDate != form.StartDate)
+                entity.StartDate = form.StartDate;
+
+            if (entity.EndDate != form.EndDate)
+                entity.EndDate = form.EndDate;
+
+            if (entity.UserId != form.UserId)
+                entity.UserId = form.UserId;
+
+            if (entity.ClientId != form.ClientId)
+                entity.ClientId = form.ClientId;
+
+            if (entity.StatusId != form.StatusId)
+                entity.StatusId = form.StatusId;
         }
     }
 }

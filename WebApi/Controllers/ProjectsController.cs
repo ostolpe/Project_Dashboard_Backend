@@ -10,7 +10,6 @@ namespace WebApi.Controllers
     {
         private readonly IProjectService _projectService = projectService;
 
-        //Create
         [HttpPost]
         public async Task<IActionResult> Create(AddProjectForm projectForm)
         {
@@ -22,7 +21,6 @@ namespace WebApi.Controllers
             return result ? Ok(result) : BadRequest();
         }
 
-        //Read
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -42,7 +40,6 @@ namespace WebApi.Controllers
             return result != null ? Ok(result) : NotFound();
         }
 
-        //Update
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProjectForm projectForm)
         {
@@ -53,7 +50,6 @@ namespace WebApi.Controllers
             return result ? Ok(result) : NotFound();
         }
 
-        //Delete
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
