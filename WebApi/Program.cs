@@ -1,3 +1,4 @@
+using Business.Managers;
 using Business.Services;
 using Data.Contexts;
 using Data.Entities;
@@ -23,6 +24,9 @@ builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenManager, TokenManager>();
+
 
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddIdentity<UserEntity, IdentityRole>().AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
