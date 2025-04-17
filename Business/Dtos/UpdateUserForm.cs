@@ -25,5 +25,6 @@ namespace Business.Dtos
         public string? City { get; set; }
         public string? JobTitle { get; set; }
         public string? ImageUrl { get; set; }
+        public string Role { get; set; } = null!;
     }
 }

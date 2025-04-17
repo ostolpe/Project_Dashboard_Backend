@@ -41,6 +41,9 @@ namespace Business.Services
             var result = await _userManager.CreateAsync(entity);
 
             if (result.Succeeded)
+                await _userManager.AddToRoleAsync(entity, userForm.Role);
+
+            if (result.Succeeded)
             {
                 _cache.Remove(_cacheKey_All);
             }
@@ -111,6 +114,15 @@ namespace Business.Services
 
             UserFactory.UpdateUser(user, userForm);
 
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            if (!currentRoles.Contains(userForm.Role))
+            {
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+                await _userManager.AddToRoleAsync(user, userForm.Role);
+            }
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -140,9 +152,17 @@ namespace Business.Services
         {
             _cache.Remove(_cacheKey_All);
             var entities = await _userRepository.GetAllAsync();
-            var users = entities.Select(UserFactory.CreateUser);
 
-            users = users.OrderBy(x => x.FirstName);
+            var users = new List<User>();
+            foreach (var entity in entities)
+            {
+                var roles = await _userManager.GetRolesAsync(entity);
+                var user = UserFactory.CreateUser(entity);
+                user.Role = roles.FirstOrDefault() ?? "User";
+                users.Add(user);
+            }
+
+            users = users.OrderBy(x => x.FirstName).ToList();
             _cache.Set(_cacheKey_All, users, TimeSpan.FromMinutes(10));
 
             return users;

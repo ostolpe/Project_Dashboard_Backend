@@ -32,6 +32,9 @@ namespace Business.Services
 
             var result = await _userManager.CreateAsync(user, form.Password);
 
+            if (result.Succeeded && !string.IsNullOrEmpty(form.Role))
+                await _userManager.AddToRoleAsync(user, form.Role);
+
             return result;
         }
 
