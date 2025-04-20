@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Business.Dtos
 {
@@ -11,7 +10,7 @@ namespace Business.Dtos
         public string Email { get; set; } = null!;
         [Required]
         public string Phone { get; set; } = null!;
-        public IFormFile? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         [Required]
         public string StreetName { get; set; } = null!;
         [Required]

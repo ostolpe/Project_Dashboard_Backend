@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Business.Dtos
 {
@@ -26,7 +25,6 @@ namespace Business.Dtos
         public string? City { get; set; }
         public string? JobTitle { get; set; }
         public string? ImageUrl { get; set; }
-        public IFormFile? NewImageUrl { get; set; }
 
         [Required]
         public string Role { get; set; } = null!;

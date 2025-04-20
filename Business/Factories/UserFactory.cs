@@ -6,7 +6,7 @@ namespace Business.Factories
 {
     public static class UserFactory
     {
-        public static UserEntity CreateUserEntity(AddUserForm userForm, string? newImageUrl = null)
+        public static UserEntity CreateUserEntity(AddUserForm userForm)
         {
             return new UserEntity
             {
@@ -15,7 +15,7 @@ namespace Business.Factories
                 LastName = userForm.LastName,
                 Email = userForm.Email,
                 JobTitle = userForm.JobTitle,
-                ImageUrl = newImageUrl,
+                ImageUrl = userForm.ImageUrl,
                 Address = new UserAddressEntity
                 {
                     StreetName = userForm.StreetName,
@@ -42,7 +42,7 @@ namespace Business.Factories
             };
         }
 
-        public static void UpdateUser(UserEntity user, UpdateUserForm userForm, string? newImageUrl = null)
+        public static void UpdateUser(UserEntity user, UpdateUserForm userForm)
         {
             if (user.FirstName != userForm.FirstName)
                 user.FirstName = userForm.FirstName;
@@ -68,8 +68,8 @@ namespace Business.Factories
             if (user.JobTitle != userForm.JobTitle)
                 user.JobTitle = userForm.JobTitle;
 
-            if (user.ImageUrl != newImageUrl)
-                user.ImageUrl = newImageUrl;
+            if (user.ImageUrl != userForm.ImageUrl)
+                user.ImageUrl = userForm.ImageUrl;
         }
     }
 }

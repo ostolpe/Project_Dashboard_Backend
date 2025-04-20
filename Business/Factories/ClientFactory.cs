@@ -6,14 +6,14 @@ namespace Business.Factories
 {
     public static class ClientFactory
     {
-        public static ClientEntity CreateClientEntity(AddClientForm clientForm, string? newImageUrl = null)
+        public static ClientEntity CreateClientEntity(AddClientForm clientForm)
         {
             return new ClientEntity
             {
                 Name = clientForm.Name,
                 Email = clientForm.Email,
                 Phone = clientForm.Phone,
-                ImageUrl = newImageUrl,
+                ImageUrl = clientForm.ImageUrl,
                 Address = new ClientAddressEntity
                 {
                     StreetName = clientForm.StreetName,
@@ -39,7 +39,7 @@ namespace Business.Factories
             };
         }
 
-        public static void UpdateClient(ClientEntity entity, UpdateClientForm clientForm, string? newImageUrl = null)
+        public static void UpdateClient(ClientEntity entity, UpdateClientForm clientForm)
         {
             if (entity.Name != clientForm.Name)
                 entity.Name = clientForm.Name;
@@ -50,8 +50,8 @@ namespace Business.Factories
             if (entity.Phone != clientForm.Phone)
                 entity.Phone = clientForm.Phone;
 
-            if (entity.ImageUrl != newImageUrl)
-                entity.ImageUrl = newImageUrl;
+            if (entity.ImageUrl != clientForm.ImageUrl)
+                entity.ImageUrl = clientForm.ImageUrl;
 
             if (entity.Address?.StreetName != clientForm.StreetName)
                 entity.Address!.StreetName = clientForm.StreetName;

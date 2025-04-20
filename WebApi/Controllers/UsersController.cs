@@ -1,19 +1,19 @@
 ﻿using Business.Dtos;
 using Business.Models;
 using Business.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Documentation.ClientEndpoints;
 using Presentation.Documentation.UserEndpoints;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using WebApi.Extensions.Attributes;
+using WebApi.Documentation.UsersEndPoints;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [UseAdminApiKey]
-    [Authorize(Roles = "Admin")]
+    //[UseAdminApiKey]
+    //[Authorize(Roles = "Admin")]
     [Consumes("application/json")]
     [Produces("application/json")]
     public class UsersController(IUserService userService) : ControllerBase
@@ -21,6 +21,7 @@ namespace WebApi.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpPost]
+        [SwaggerRequestExample(typeof(AddUserForm), typeof(AddUserFormExample))]
         [SwaggerOperation(Summary = "Create a new user", Description = "Creates a new user in the system.")]
         [SwaggerResponse(200, "User successfully created")]
         [SwaggerResponse(400, "Validation failed", typeof(ErrorMessage))]
@@ -59,6 +60,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [SwaggerRequestExample(typeof(UpdateUserForm), typeof(UpdateUserFormExample))]
         [SwaggerOperation(Summary = "Update a user", Description = "Updates an existing user with new information.")]
         [SwaggerResponse(200, "User successfully updated")]
         [SwaggerResponse(404, "User not found", typeof(ErrorMessage))]

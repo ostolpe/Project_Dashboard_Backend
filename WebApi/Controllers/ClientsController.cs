@@ -1,19 +1,17 @@
 ﻿using Business.Dtos;
 using Business.Models;
 using Business.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Documentation.ClientEndpoints;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using WebApi.Extensions.Attributes;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [UseAdminApiKey]
-    [Authorize(Roles = "Admin")]
+    //[UseAdminApiKey]
+    //[Authorize(Roles = "Admin")]
     [Consumes("application/json")]
     [Produces("application/json")]
     public class ClientsController(IClientService clientService) : ControllerBase
@@ -22,8 +20,6 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-
-        [Consumes("multipart/form-data")]
         [SwaggerOperation(
            Summary = "Create a new Client",
            Description = "Only Admins can create clients. This will require an API‑key 'X‑ADM‑API‑KEY' in the header."
@@ -34,7 +30,7 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ClientValidationErrorExample))]
         [SwaggerResponse(StatusCodes.Status409Conflict, "Client already exists.", typeof(ErrorMessage))]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ClientConflictErrorExample))]
-        public async Task<IActionResult> Create([FromForm] AddClientForm clientForm)
+        public async Task<IActionResult> Create(AddClientForm clientForm)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ErrorMessage("Validation failed"));
@@ -73,7 +69,6 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        [Consumes("multipart/form-data")]
         [SwaggerOperation(Summary = "Update a client", Description = "Updates an existing client with the provided data.")]
         [SwaggerRequestExample(typeof(UpdateClientForm), typeof(UpdateClientFormExample))]
         [SwaggerResponse(StatusCodes.Status200OK, "Client updated successfully", typeof(Client))]
@@ -81,7 +76,7 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ClientValidationErrorExample))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Client not found", typeof(ErrorMessage))]
         [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ClientNotFoundExample))]
-        public async Task<IActionResult> Update([FromForm] UpdateClientForm clientForm)
+        public async Task<IActionResult> Update(UpdateClientForm clientForm)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ErrorMessage("Validation failed"));
