@@ -1,5 +1,6 @@
 ﻿using Business.Dtos;
 using Business.Factories;
+using Business.Models;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -35,9 +36,7 @@ namespace Business.Services
 
             var entity = UserFactory.CreateUserEntity(userForm);
 
-            //var password = "BytMig123!"; // Detta måste gå att lösa på ett bättre säkrare sätt? Hämta från config? 
-
-            //behövs password ens skickas med här? eller räcker det med att det skickas in när man signar upp...?
+            //det kommer ju inte in något password från detta form. bör det sättas ett default/random password här och skickas med i create? 
             var result = await _userManager.CreateAsync(entity);
 
             if (result.Succeeded)

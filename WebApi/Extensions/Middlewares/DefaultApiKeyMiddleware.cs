@@ -8,6 +8,12 @@
 
         public async Task InvokeAsync(HttpContext context)
         {
+            if (context.Request.Path.StartsWithSegments("/swagger") || context.Request.Path.StartsWithSegments("/swagger-ui") || context.Request.Path.StartsWithSegments("/index.html"))
+            {
+                await _next(context);
+                return;
+            }
+
             var defaultApiKey = _configuration["SecretKeys:Default"]! ?? null;
 
             if (string.IsNullOrEmpty(defaultApiKey) || !context.Request.Headers.TryGetValue(APIKEY_HEADER_NAME, out var providedApiKey))
