@@ -10,9 +10,9 @@ namespace Business.Services
         Task<IEnumerable<Status>?> GetStatusesAsync();
     }
 
-    public class StatusService(StatusRepository statusRepository, IMemoryCache cache) : IStatusService
+    public class StatusService(IStatusRepository statusRepository, IMemoryCache cache) : IStatusService
     {
-        private readonly StatusRepository _statusRepository = statusRepository;
+        private readonly IStatusRepository _statusRepository = statusRepository;
         private readonly IMemoryCache _cache = cache;
         private const string _cacheKey_All = "Status_All";
 

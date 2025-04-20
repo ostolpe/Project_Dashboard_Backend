@@ -32,11 +32,11 @@ builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<UserAddressRepository>();
+builder.Services.AddScoped<IUserAddressRepository, UserAddressRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<ClientAddressRepository>();
-builder.Services.AddScoped<StatusRepository>();
+builder.Services.AddScoped<IClientAddressRepository, ClientAddressRepository>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IStatusService, StatusService>();

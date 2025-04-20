@@ -13,7 +13,7 @@ namespace Presentation.Documentation.ClientEndpoints
                 Name = "Acme Corporation",
                 Email = "contact@acme.com",
                 Phone = "012345689",
-                ImageUrl = "ImageURL",
+                //ImageUrl = "ImageURL",
                 StreetName = "Vägen 1",
                 PostalCode = "123 45",
                 City = "Staden",

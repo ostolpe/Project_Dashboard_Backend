@@ -3,7 +3,10 @@ using Data.Entities;
 
 namespace Data.Repositories
 {
-    public class ClientAddressRepository(DataContext context) : BaseRepository<ClientAddressEntity>(context)
+    public interface IClientAddressRepository : IBaseRepository<ClientAddressEntity>
+    {
+    }
+    public class ClientAddressRepository(DataContext context) : BaseRepository<ClientAddressEntity>(context), IClientAddressRepository
     {
     }
 }

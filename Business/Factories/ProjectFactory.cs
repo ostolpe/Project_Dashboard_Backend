@@ -6,12 +6,12 @@ namespace Business.Factories
 {
     public static class ProjectFactory
     {
-        public static ProjectEntity CreateProjectEntity(AddProjectForm projectForm)
+        public static ProjectEntity CreateProjectEntity(AddProjectForm projectForm, string? newImageUrl = null)
         {
 
             return new ProjectEntity
             {
-                ImageUrl = projectForm.ImageUrl,
+                ImageUrl = newImageUrl,
                 Name = projectForm.Name,
                 Description = projectForm.Description,
                 Budget = projectForm.Budget,
@@ -55,10 +55,10 @@ namespace Business.Factories
             };
         }
 
-        public static void UpdateProject(ProjectEntity entity, UpdateProjectForm form)
+        public static void UpdateProject(ProjectEntity entity, UpdateProjectForm form, string? newImageUrl = null)
         {
-            if (entity.ImageUrl != form.ImageUrl)
-                entity.ImageUrl = form.ImageUrl;
+            if (entity.ImageUrl != newImageUrl)
+                entity.ImageUrl = newImageUrl;
 
             if (entity.Name != form.Name)
                 entity.Name = form.Name;

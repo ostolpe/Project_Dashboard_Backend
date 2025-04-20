@@ -17,7 +17,7 @@ namespace Presentation.Documentation.ClientEndpoints
                 PostalCode = "123 45",
                 City = "Staden",
                 JobTitle = "Junior developer",
-                ImageUrl = "image.com",
+                //ImageUrl = "image.com",
                 Role = "User"
             };
         }

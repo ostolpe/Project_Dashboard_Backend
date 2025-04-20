@@ -7,7 +7,7 @@
     {
         public AddProjectForm GetExamples() => new AddProjectForm
         {
-            ImageUrl = "image.com",
+            //ImageUrl = "image.com",
             Name = "Website Redesign",
             Description = "Full redesign of corporate website.",
             Budget = 9999999,
